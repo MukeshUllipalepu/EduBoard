@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EduBoard — Multi-Student Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="edu-app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Primary">
+      <div class="brand">
+        <div class="logo">ED</div>
+        <div class="brand-text">
+          <h1>EduBoard</h1>
+          <p class="muted">Student Portal</p>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Main navigation">
+        <ul>
+          <li><a class="nav-link active" data-view="dashboard" href="#"><i class="fas fa-chart-line" aria-hidden="true"></i><span>Dashboard</span></a></li>
+          <li><a class="nav-link" data-view="subjects" href="#"><i class="fas fa-book" aria-hidden="true"></i><span>Subjects</span></a></li>
+          <li><a class="nav-link" data-view="attendance" href="#"><i class="fas fa-calendar-check" aria-hidden="true"></i><span>Attendance</span></a></li>
+          <li><a class="nav-link" data-view="profile" href="#"><i class="fas fa-user" aria-hidden="true"></i><span>Profile</span></a></li>
+          <li><a class="nav-link" data-view="settings" href="#"><i class="fas fa-cog" aria-hidden="true"></i><span>Settings</span></a></li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="mini-profile">
+          <div class="avatar">ED</div>
+          <div class="mini-info">
+            <div class="name">EduBoard</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main-area">
+      <header class="topbar" role="banner">
+        <div class="left">
+          <h2 class="page-title">Dashboard</h2>
+
+          <!-- Student selector -->
+          <div class="student-select">
+            <label for="studentSelect" class="vis-hidden">Select student</label>
+            <select id="studentSelect" aria-label="Select student"></select>
+          </div>
+
+          <div class="search-wrap" role="search" aria-hidden="true">
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <input aria-label="Search" placeholder="Search subjects, assignments..." />
+          </div>
+        </div>
+
+        <div class="right">
+          <!-- notification & email side-by-side -->
+          <div class="header-icons" role="region" aria-label="Header actions">
+            <button id="notifyBtn" class="icon-btn" aria-label="Notifications"><i class="fas fa-bell"></i></button>
+            <button id="mailBtn" class="icon-btn" aria-label="Messages"><i class="fas fa-envelope"></i></button>
+          </div>
+
+          <div class="profile" role="region" aria-label="Signed in">
+            <div class="avatar small-avatar" id="headerAvatar">MJ</div>
+          </div>
+        </div>
+      </header>
+
+      <main class="content" role="main">
+        <!-- Dashboard view -->
+        <section id="view-dashboard" class="view active" aria-labelledby="dashboard-heading">
+          <div class="overview" aria-label="Student overview">
+            <article class="card" id="card-gpa" aria-labelledby="gpa"><h3 id="gpa">GPA</h3><div class="big">—</div><p class="muted">Current semester</p></article>
+            <article class="card" id="card-attendance" aria-labelledby="attendance"><h3 id="attendance">Attendance</h3><div class="big">—</div><p class="muted">This academic year</p></article>
+            <article class="card" id="card-assign" aria-labelledby="assignments"><h3 id="assignments">Assignments Due</h3><div class="big">—</div><p class="muted">Due this week</p></article>
+            <article class="card" id="card-credits" aria-labelledby="credits"><h3 id="credits">Total Credits</h3><div class="big">—</div><p class="muted">Completed</p></article>
+          </div>
+
+          <div class="grid-2">
+            <section class="progress-section" aria-labelledby="progress-heading">
+              <div class="section-header">
+                <h3 id="progress-heading">Subject Progress</h3>
+                <div class="controls">
+                  <label class="vis-hidden" for="filter-subj">Filter</label>
+                  <select id="filter-subj" aria-label="Filter by subject"><option>All subjects</option></select>
+                </div>
+              </div>
+
+              <div class="table-wrap">
+                <table id="subjectsTable">
+                  <thead>
+                    <tr><th>Subject</th><th>Instructor</th><th>Progress</th><th>Grade</th><th>Attendance</th></tr>
+                  </thead>
+                  <tbody><!-- rendered by JS --></tbody>
+                </table>
+              </div>
+            </section>
+
+            <aside class="side-cards" aria-label="Side information">
+              <section class="deadlines" aria-labelledby="deadlines-heading">
+                <h3 id="deadlines-heading">Upcoming Deadlines</h3>
+                <ul id="deadlineList" class="deadline-list" aria-live="polite"></ul>
+              </section>
+
+              <section class="profile-card" aria-labelledby="profile-heading">
+                <h3 id="profile-heading">Student Profile</h3>
+                <div class="profile-body" id="profileBody"></div>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <!-- Subjects view (all subjects rowwise) -->
+        <section id="view-subjects" class="view" aria-labelledby="subjects-heading" hidden>
+          <h2 id="subjects-heading">All Subjects</h2>
+          <div class="table-wrap">
+            <table id="allSubjectsTable">
+              <thead><tr><th>Subject</th><th>Description</th><th>Instructor</th><th>Progress</th></tr></thead>
+              <tbody><!-- JS renders subject rows with description --></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Attendance view -->
+        <section id="view-attendance" class="view" aria-labelledby="attendance-heading" hidden>
+          <h2 id="attendance-heading">Attendance</h2>
+          <div class="table-wrap">
+            <table id="attendanceTable">
+              <thead><tr><th>Subject</th><th>Instructor</th><th>Attendance</th></tr></thead>
+              <tbody><!-- JS renders attendance rows --></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Profile view -->
+        <section id="view-profile" class="view" aria-labelledby="profile-heading-main" hidden>
+          <h2 id="profile-heading-main">Profile</h2>
+          <div class="profile-card">
+            <div id="profileDetails"><!-- JS renders full profile --></div>
+          </div>
+        </section>
+
+        <!-- Settings view -->
+        <section id="view-settings" class="view" aria-labelledby="settings-heading" hidden>
+          <h2 id="settings-heading">Settings</h2>
+          <div class="table-wrap">
+            <div style="display:flex;flex-direction:column;gap:12px;padding:12px">
+              <button id="signOutBtn" class="btn" type="button">Sign out</button>
+              <button id="logoutBtn" class="btn ghost" type="button">Logout</button>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <footer class="page-footer" role="contentinfo"><div class="muted small">© 2025 EduBoard</div></footer>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
